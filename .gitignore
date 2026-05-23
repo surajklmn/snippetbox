@@ -1,0 +1,6 @@
+# Ignore compiled Go binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
