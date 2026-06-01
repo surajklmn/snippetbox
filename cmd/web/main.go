@@ -2,12 +2,15 @@ package main
 import (
 	"log"
 	"net/http"
+	"flag"
 
 )
 
 func main(){
 	mux := http.NewServeMux()
 
+	addr := flag.String("addr",":4000","HTTP network address")
+	flag.Parse()
 
 
 	//Create a file server which servers files out of the ".ui/static" directory
@@ -23,9 +26,8 @@ func main(){
 	mux.HandleFunc("POST /snippet/create/",snippetCreatePost)
 
 	
-	log.Print("starting server  on :4000")
-
-	err := http.ListenAndServe(":4000",mux)
+	log.Printf("starting server  on %s",*addr)
+	err := http.ListenAndServe(*addr,mux)
 	log.Fatal(err)
 
 
