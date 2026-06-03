@@ -5,6 +5,9 @@ import (
 	"net/http"
 	"strconv"
 	"html/template"
+	"errors"
+
+	"github.com/surajklmn/snippetbox/internal/models"
 )
 // home is now a methond against *apllication
 func (app *application)home(w http.ResponseWriter, r *http.Request){
@@ -37,7 +40,17 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request){
 		http.NotFound(w,r)
 		return
 	}
-	_,err = fmt.Fprintf(w,"Display a specific snippet with ID %d",id)
+
+	snippet,err := app.snippets.Get(id)
+	if err != nil{
+		if errors.Is(err,models.ErrNoRecord){
+			http.NotFound(w,r)
+		}else{
+			app.serverError(w,r,err)
+		}
+		return
+	}
+	_,err = fmt.Fprintf(w,"%v",snippet)
 	if err != nil{
 		fmt.Println("Write Error")
 	}
