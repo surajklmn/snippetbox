@@ -17,9 +17,9 @@ func (app *application)home(w http.ResponseWriter, r *http.Request){
 		app.serverError(w,r,err)
 		return
 	}
-	for _,snippet := range snippets{
-		fmt.Fprintf(w,"%v\n",snippet)
-	}
+	// for _,snippet := range snippets{
+	// 	fmt.Fprintf(w,"%v\n",snippet)
+	// }
 
 
 	// Initialize a slice containing the path to the two files.
@@ -35,10 +35,13 @@ func (app *application)home(w http.ResponseWriter, r *http.Request){
 		app.serverError(w,r,err)
 		return
 	}
+	data := templateData {
+	Snippets : snippets,
+	}
 	//Execute template
 	//Any data that you pass as the final parameter to ts.ExecuteTemplate() is represented
 // within your HTML templates by the . character (referred to as dot).
-	err = ts.ExecuteTemplate(w,"base",snippets)
+	err = ts.ExecuteTemplate(w,"base",data)
 
 	if err != nil{
 		app.serverError(w,r,err)
