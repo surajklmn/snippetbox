@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"html/template"
+	//"html/template"
 	"errors"
 
 	"github.com/surajklmn/snippetbox/internal/models"
@@ -12,25 +12,34 @@ import (
 // home is now a methond against *apllication
 func (app *application)home(w http.ResponseWriter, r *http.Request){
 	w.Header().Add("Server","Go")
-
-	// Initialize a slice containing the path to the two files.
-	// Our base template must be the first file in the slice
-	files := []string{
-		"./ui/html/base.tmpl.html",
-		"./ui/html/pages/home.tmpl.html",
-		"./ui/html/partials/nav.tmpl.html",
-	}
-
-	ts, err := template.ParseFiles(files...)
-	if err != nil{
+	snippets, err := app.snippets.Latest()
+	if err!= nil{
 		app.serverError(w,r,err)
 		return
 	}
-	err = ts.ExecuteTemplate(w,"base",nil)
-
-	if err != nil{
-		app.serverError(w,r,err)
+	for _,snippet := range snippets{
+		fmt.Fprintf(w,"%v\n",snippet)
 	}
+
+
+	// Initialize a slice containing the path to the two files.
+	// Our base template must be the first file in the slice
+	// files := []string{
+	// 	"./ui/html/base.tmpl.html",
+	// 	"./ui/html/pages/home.tmpl.html",
+	// 	"./ui/html/partials/nav.tmpl.html",
+	// }
+	//
+	// ts, err := template.ParseFiles(files...)
+	// if err != nil{
+	// 	app.serverError(w,r,err)
+	// 	return
+	// }
+	// err = ts.ExecuteTemplate(w,"base",nil)
+	//
+	// if err != nil{
+	// 	app.serverError(w,r,err)
+	// }
 }
 
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request){
