@@ -1,5 +1,9 @@
 package main 
-import "github.com/surajklmn/snippetbox/internal/models"
+import (
+	"html/template"
+	"path/filepath"
+	"github.com/surajklmn/snippetbox/internal/models"
+)
 
 type templateData struct{
 	Snippet models.Snippet
