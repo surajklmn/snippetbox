@@ -3,6 +3,7 @@ import (
 	"database/sql"
 	"log/slog"
 	"net/http"
+	"html/template"
 	"flag"
 	"os"
 	"github.com/surajklmn/snippetbox/internal/models"
@@ -13,6 +14,7 @@ import (
 type application struct{//application struct to hold system wide dependencies
 	logger *slog.Logger
 	snippets *models.SnippetModel
+	templateCache map[string]*template.Template
 }
 
 func main(){
@@ -32,9 +34,16 @@ func main(){
 
 	defer db.Close()
 
+	templateCache , err := newTemplateCache()
+	if err != nil{
+		logger.Error(err.Error())
+		os.Exit(1)
+	}
+
 	app := &application{
 		logger: logger,
 		snippets: &models.SnippetModel{DB:db},
+		templateCache: templateCache,
 	}
 
 	logger.Info("starting server",slog.String("addr", *addr))
