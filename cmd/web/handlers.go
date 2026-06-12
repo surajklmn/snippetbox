@@ -16,10 +16,10 @@ func (app *application)home(w http.ResponseWriter, r *http.Request){
 		app.serverError(w,r,err)
 		return
 	}
+	data := app.newTemplateData(r)
+	data.Snippets = snippets
 	// New render helper
-	app.render(w,r,http.StatusOK, "home.tmpl.html",templateData{
-		Snippets:snippets,
-	})
+	app.render(w,r,http.StatusOK, "home.tmpl.html",data)
 
 	// for _,snippet := range snippets{
 	// 	fmt.Fprintf(w,"%v\n",snippet)
@@ -91,9 +91,9 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request){
 	// }
 
 	//User the new render helper
-	app.render(w,r,http.StatusOK,"view.tmpl.html", templateData{
-		Snippet: snippet,
-	})
+	data := app.newTemplateData(r)
+	data.Snippet = snippet
+	app.render(w,r,http.StatusOK,"view.tmpl.html",data)
 }
 
 func (app *application)snippetCreate(w http.ResponseWriter, r *http.Request){
