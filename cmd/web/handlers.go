@@ -98,10 +98,12 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request){
 }
 
 func (app *application)snippetCreate(w http.ResponseWriter, r *http.Request){
-	_,err := w.Write([]byte("Display a form for creating a new snippet..."))
-	if err != nil{
-		fmt.Println("Write Error")
-	}
+	data := app.newTemplateData(r)
+
+	app.render(w,r,http.StatusOK,"create.tmpl.html",data)
+	// if err != nil{
+	// 	fmt.Println("Write Error")
+	// }
 }
 
 func (app *application)snippetCreatePost(w http.ResponseWriter,r *http.Request){
