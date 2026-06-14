@@ -10,7 +10,8 @@ import (
 )
 // home is now a methond against *apllication
 func (app *application)home(w http.ResponseWriter, r *http.Request){
-	w.Header().Add("Server","Go")
+	// we added a middleware to write custom header so no need to do this
+	//w.Header().Add("Server","Go")
 	snippets, err := app.snippets.Latest()
 	if err!= nil{
 		app.serverError(w,r,err)
